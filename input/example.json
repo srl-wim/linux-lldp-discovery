@@ -1,0 +1,168 @@
+{
+    "lldp": {
+      "interface": [
+        {
+          "ens2f0": {
+            "via": "LLDP",
+            "rid": "2",
+            "age": "0 day, 00:37:22",
+            "chassis": {
+              "switch1": {
+                "id": {
+                  "type": "mac",
+                  "value": "d0:99:d5:e1:e2:41"
+                },
+                "descr": "TiMOS-DC-B-20.5.1-16 both/x86 NUAGE 210 Copyright (c) 2000-2020 Nokia.\r\nAll rights reserved. All use subject to applicable license agreements.\r\nBuilt on Sat May 30 03:32:10 EDT 2020 [546ae3] by builder in /rel20.5-DC/release/panos/main\r\n",
+                "mgmt-ip": "100.112.100.1",
+                "capability": [
+                  {
+                    "type": "Bridge",
+                    "enabled": true
+                  },
+                  {
+                    "type": "Router",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            "port": {
+              "id": {
+                "type": "local",
+                "value": "36405248"
+              },
+              "descr": "Port 1/1/23",
+              "ttl": "121"
+            }
+          }
+        },
+        {
+          "eno6": {
+            "via": "LLDP",
+            "rid": "2",
+            "age": "0 day, 00:46:58",
+            "chassis": {
+              "switch1": {
+                "id": {
+                  "type": "mac",
+                  "value": "d0:99:d5:e1:e2:41"
+                },
+                "descr": "TiMOS-DC-B-20.5.1-16 both/x86 NUAGE 210 Copyright (c) 2000-2020 Nokia.\r\nAll rights reserved. All use subject to applicable license agreements.\r\nBuilt on Sat May 30 03:32:10 EDT 2020 [546ae3] by builder in /rel20.5-DC/release/panos/main\r\n",
+                "mgmt-ip": "100.112.100.1",
+                "capability": [
+                  {
+                    "type": "Bridge",
+                    "enabled": true
+                  },
+                  {
+                    "type": "Router",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            "port": {
+              "id": {
+                "type": "local",
+                "value": "36274176"
+              },
+              "descr": "Compute/Storage Server",
+              "ttl": "121"
+            }
+          }
+        },
+        {
+          "cilium_net": {
+            "via": "LLDP",
+            "rid": "1",
+            "age": "0 day, 00:46:58",
+            "chassis": {
+              "hyp-2.maas": {
+                "id": {
+                  "type": "mac",
+                  "value": "08:f1:ea:6f:69:04"
+                },
+                "descr": "Ubuntu 20.04.1 LTS Linux 5.4.0-58-generic #64-Ubuntu SMP Wed Dec 9 08:16:25 UTC 2020 x86_64",
+                "mgmt-ip": [
+                  "100.112.3.12",
+                  "fe80::ba83:3ff:fe80:d704"
+                ],
+                "capability": [
+                  {
+                    "type": "Bridge",
+                    "enabled": true
+                  },
+                  {
+                    "type": "Router",
+                    "enabled": true
+                  },
+                  {
+                    "type": "Wlan",
+                    "enabled": false
+                  },
+                  {
+                    "type": "Station",
+                    "enabled": false
+                  }
+                ]
+              }
+            },
+            "port": {
+              "id": {
+                "type": "mac",
+                "value": "72:84:05:d7:fd:d9"
+              },
+              "descr": "cilium_host",
+              "ttl": "120"
+            }
+          }
+        },
+        {
+          "cilium_host": {
+            "via": "LLDP",
+            "rid": "1",
+            "age": "0 day, 00:46:58",
+            "chassis": {
+              "hyp-2.maas": {
+                "id": {
+                  "type": "mac",
+                  "value": "08:f1:ea:6f:69:04"
+                },
+                "descr": "Ubuntu 20.04.1 LTS Linux 5.4.0-58-generic #64-Ubuntu SMP Wed Dec 9 08:16:25 UTC 2020 x86_64",
+                "mgmt-ip": [
+                  "100.112.3.12",
+                  "fe80::ba83:3ff:fe80:d704"
+                ],
+                "capability": [
+                  {
+                    "type": "Bridge",
+                    "enabled": true
+                  },
+                  {
+                    "type": "Router",
+                    "enabled": true
+                  },
+                  {
+                    "type": "Wlan",
+                    "enabled": false
+                  },
+                  {
+                    "type": "Station",
+                    "enabled": false
+                  }
+                ]
+              }
+            },
+            "port": {
+              "id": {
+                "type": "mac",
+                "value": "46:ef:a5:82:a6:67"
+              },
+              "descr": "cilium_net",
+              "ttl": "120"
+            }
+          }
+        }
+      ]
+    }
+  }
