@@ -16,7 +16,6 @@ const (
 var debug bool
 var timeout time.Duration
 
-
 // path to the topology file
 var config string
 

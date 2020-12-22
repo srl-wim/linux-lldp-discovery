@@ -9,9 +9,8 @@ import (
 
 // LldpTopo struct holds the structure of the
 type LldpTopo struct {
-	InputFile   *string
-	Devices     map[string]*Device
-	Connections map[int]*Connection
+	InputFile *string
+	Devices   map[string]*Device
 
 	ctx     context.Context
 	debug   bool
@@ -20,33 +19,17 @@ type LldpTopo struct {
 
 // Device is a struct that contains the information of a device element
 type Device struct {
-	Name      string
-	DeviceID  *string
-	DeviceARN *string
-	Index     int
 	Kind      string
-	Model     string
-	Serial    string
-	Vendor    string
-	Region    string
+	ID        string
+	IDType    string
 	Endpoints map[string]*Endpoint
-}
-
-// Connection is a struct that contains the information of a link between 2 containers
-type Connection struct {
-	A      *Endpoint
-	B      *Endpoint
-	Labels map[string]string
 }
 
 // Endpoint is a struct that contains information of a link endpoint
 type Endpoint struct {
-	Device   *Device
-	Name     string
-	LinkID   *string
-	LinkARN  *string
-	Provider string
-	Kind     string
+	Device *Device
+	ID     string
+	IDType string
 }
 
 // Option struct
@@ -72,10 +55,11 @@ func WithInputFile(file string) Option {
 		if file == "" {
 			return
 		}
+		lt.InputFile = &file
 		log.Info(file)
-		if err := lt.ParseInputFile(&file); err != nil {
-			log.Fatalf("failed to read topology file: %v", err)
-		}
+		//if err := lt.ParseInputFile(&file); err != nil {
+		//	log.Fatalf("failed to read topology file: %v", err)
+		//}
 	}
 }
 
@@ -83,6 +67,7 @@ func WithInputFile(file string) Option {
 func NewLldpTopo(opts ...Option) (*LldpTopo, error) {
 	lt := &LldpTopo{
 		InputFile: new(string),
+		Devices:   make(map[string]*Device),
 		ctx:       context.Background(),
 	}
 	for _, o := range opts {

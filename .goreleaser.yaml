@@ -1,0 +1,37 @@
+project_name: lldptopo
+builds:
+  - env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/srl-wim/linux-lldp-discovery/cmd.version={{.Version}} -X github.com/srl-wim/linux-lldp-discovery/cmd.commit={{.ShortCommit}} -X github.com/srl-wim/linux-lldp-discovery/cmd.date={{.Date}}
+    goos:
+      - linux
+archives:
+  - replacements:
+      linux: Linux
+checksum:
+  name_template: checksums.txt
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+nfpms:
+  - id: lldptopo
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    package_name: lldptopo
+    maintainer: Wim Henderickx <wim.henderickx@nokia.com>
+    description: |
+      lldptopo written in go
+    vendor: Nokia
+    license: GNU GPLv3
+    formats:
+      - rpm
+      - deb
+    bindir: /usr/bin
+    symlinks:
+      /usr/bin/awsnuagenmgr: /usr/bin/lldptopo

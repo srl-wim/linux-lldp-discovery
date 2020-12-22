@@ -17,8 +17,40 @@ var initCmd = &cobra.Command{
 		opts := []lldptopo.Option{
 			lldptopo.WithDebug(debug),
 			lldptopo.WithTimeout(timeout),
-			lldptopo.WithConfigFile(config),
+			lldptopo.WithInputFile(config),
 		}
+
+		lt, err := lldptopo.NewLldpTopo(opts...)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		lt.CheckLldpDaemon()
+
+		lt.GetLldpTopology()
+
+		/*
+			for i := 0; i < 10; i++ {
+				d, err := lt.ParseInputFile(lt.InputFile)
+				if err != nil {
+					log.Fatal(err)
+				}
+				if err := lt.ParseLldpDiscovery(d); err != nil {
+					log.Fatal(err)
+				}
+
+				fmt.Println("#######################")
+				for dName, dev := range lt.Devices {
+					fmt.Printf("Device: %s %s %s\n", dName, dev.ID, dev.Kind)
+					for eName, ep := range dev.Endpoints {
+						fmt.Printf("   Port: %s %s\n", eName, ep.ID)
+					}
+				}
+				fmt.Println("#######################")
+				time.Sleep(10 * time.Second)
+
+			}
+		*/
 		return nil
 	},
 }
