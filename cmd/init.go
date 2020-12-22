@@ -35,11 +35,11 @@ var initCmd = &cobra.Command{
 		for i := 0; i < 10; i++ {
 			d, err := lt.GetLldpTopology()
 			if err != nil {
-				log.Fatalf(err)
+				log.Errorf("Get LLDP topology failure: %s", err)
 			}
 
 			if err := lt.ParseLldpDiscovery(d); err != nil {
-				log.Fatal(err)
+				log.Errorf("Parse LLDP discovery failed: %s", err)
 			}
 
 			fmt.Println("#######################")
