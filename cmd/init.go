@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/srl-wim/linux-lldp-discovery/lldptopo"
@@ -25,9 +28,30 @@ var initCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		lt.CheckLldpDaemon()
+		if err := lt.CheckLldpDaemon(); err != nil {
+			log.Fatal(err)
+		}
 
-		lt.GetLldpTopology()
+		for i := 0; i < 10; i++ {
+			d, err := lt.GetLldpTopology()
+			if err != nil {
+				log.Fatalf(err)
+			}
+
+			if err := lt.ParseLldpDiscovery(d); err != nil {
+				log.Fatal(err)
+			}
+
+			fmt.Println("#######################")
+			for dName, dev := range lt.Devices {
+				fmt.Printf("Device: %s %s %s\n", dName, dev.ID, dev.Kind)
+				for eName, ep := range dev.Endpoints {
+					fmt.Printf("   Port: %s %s\n", eName, ep.ID)
+				}
+			}
+			fmt.Println("#######################")
+			time.Sleep(10 * time.Second)
+		}
 
 		/*
 			for i := 0; i < 10; i++ {
