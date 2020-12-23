@@ -65,6 +65,7 @@ func (nl *NLink) checkLinkDelta(ifName *string, link *Link) (c bool) {
 			if l.Vfs[i].Vlan != vf.Vlan && vf.Vlan != 0 {
 				c = true
 				log.Infof("Link %s, VLAN changed or added %d -> %d", *ifName, l.Vfs[i].Vlan, vf.Vlan)
+				l.Vfs[i].Vlan = vf.Vlan
 			}
 		}
 
