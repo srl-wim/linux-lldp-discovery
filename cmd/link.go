@@ -20,6 +20,8 @@ var linkCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		go nl.ListAndWatch()
+
 		go nl.TimeoutLoop()
 
 		nl.Run()

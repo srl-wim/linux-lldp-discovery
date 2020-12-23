@@ -9,21 +9,46 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// ListAndWatch function
+func (nl *NLink) ListAndWatch() error {
+	for {
+		log.Info("ListandWatch message received")
+		select {
+		case msg := <-nl.linkChan:
+			switch msg.id {
+			case compareLinkStatus:
+				// trigger to see if link status has changed
+				log.Info("ListandWatch compareLinkStatus message received")
+				if err := nl.ParseLinks(); err != nil {
+					log.Error(err)
+				}
+			default:
+				log.Errorf("Unexpected message: %d", msg)
+			}
+
+		}
+	}
+}
+
 // TimeoutLoop runs timeout loop until the program stops
 func (nl *NLink) TimeoutLoop() {
 	// Period, in seconds, to dump stats if only counting.
-	const TIMEOUT = 10
+	const TIMEOUT = 5
 	timeout := make(chan bool, 1)
-	time.Sleep(TIMEOUT * time.Second)
-	timeout <- true
+	go func() {
+		time.Sleep(TIMEOUT * time.Second)
+		timeout <- true
+	}()
 
 	for {
 		select {
 		case <-timeout:
 			log.Infof("Timeout handling")
-			time.Sleep(5 * time.Second)
-			log.Infof("Timeout done")
-			timeout <- true
+			go func() {
+				time.Sleep(5 * time.Second)
+				log.Infof("Timeout done")
+				timeout <- true
+			}()
 			log.Infof("Request compareLinkStatus")
 			request := &cMsg{
 				id:       compareLinkStatus,
