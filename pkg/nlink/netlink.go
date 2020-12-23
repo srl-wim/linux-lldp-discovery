@@ -10,11 +10,13 @@ import (
 // ListAndWatch function
 func (nl *NLink) ListAndWatch() error {
 	for {
+		log.Info("ListandWatch message received")
 		select {
 		case msg := <-nl.linkChan:
 			switch msg.id {
 			case compareLinkStatus:
 				// trigger to see if link status has changed
+				log.Info("ListandWatch compareLinkStatus message received")
 				if err := nl.ParseLinks(); err != nil {
 					log.Error(err)
 				}

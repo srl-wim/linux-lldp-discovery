@@ -14,19 +14,16 @@ func (nl *NLink) TimeoutLoop() {
 	// Period, in seconds, to dump stats if only counting.
 	const TIMEOUT = 10
 	timeout := make(chan bool, 1)
-	go func() {
-		time.Sleep(TIMEOUT * time.Second)
-		timeout <- true
-	}()
+	time.Sleep(TIMEOUT * time.Second)
+	timeout <- true
 
 	for {
 		select {
 		case <-timeout:
-			go func() {
-				log.Infof("Timeout done")
-				time.Sleep(TIMEOUT * time.Second)
-				timeout <- true
-			}()
+			log.Infof("Timeout handling")
+			time.Sleep(5 * time.Second)
+			log.Infof("Timeout done")
+			timeout <- true
 			log.Infof("Request compareLinkStatus")
 			request := &cMsg{
 				id:       compareLinkStatus,
