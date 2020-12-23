@@ -6,7 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/srl-wim/linux-lldp-discovery/lldptopo"
+	"github.com/srl-wim/linux-lldp-discovery/pkg/lldptopo"
 )
 
 // deployCmd represents the deploy command
