@@ -32,7 +32,9 @@ func (nl *NLink) ParseLinks() error {
 	for ifName, l := range nl.Links {
 		fmt.Printf("Link: %s %s %s &s %d\n", ifName, l.OperState, l.HardwareAddr, l.MTU)
 		for i, vf := range l.Vfs {
-			fmt.Printf("   VFs: %d %d\n", i, vf.Vlan)
+			if vf.Vlan != 0 {
+				fmt.Printf("   VFs: %d %d\n", i, vf.Vlan)
+			}
 		}
 	}
 	fmt.Println("#######################")
@@ -87,5 +89,3 @@ func linkInNetworkAtatchement(ifName *string) bool {
 	return false
 
 }
-
-

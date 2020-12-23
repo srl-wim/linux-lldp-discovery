@@ -55,7 +55,7 @@ func (nl *NLink) TimeoutLoop() {
 				respChan: nil,
 			}
 			nl.linkChan <- request
-		case msg := <-nl.loopChan:
+		case msg := <-nl.timeoutChan:
 			switch msg.id {
 			case shutdown:
 				log.Infof("Shutdown message received")
@@ -90,7 +90,7 @@ func (nl *NLink) Run() {
 			log.Info("Interrupt, stopping gracefully...")
 			// add a stop function to stop the go-routine
 
-			shut(nl.loopChan)
+			shut(nl.timeoutChan)
 
 			// Now that they are all done. Unblock
 			doneSignal <- true

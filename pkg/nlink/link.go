@@ -30,8 +30,8 @@ func WithTimeout(dur time.Duration) Option {
 type NLink struct {
 	Links map[string]*Link
 
-	loopChan chan *cMsg
-	linkChan chan *cMsg
+	timeoutChan chan *cMsg
+	linkChan    chan *cMsg
 
 	debug   bool
 	timeout time.Duration
@@ -51,9 +51,9 @@ type Link struct {
 // NewNLink function defines a new lldptopo
 func NewNLink(opts ...Option) (*NLink, error) {
 	nl := &NLink{
-		Links: make(map[string]*Link),
-		loopChan: make(chan *cMsg),
-		linkChan: make(chan *cMsg),
+		Links:       make(map[string]*Link),
+		timeoutChan: make(chan *cMsg),
+		linkChan:    make(chan *cMsg),
 	}
 	for _, o := range opts {
 		o(nl)
