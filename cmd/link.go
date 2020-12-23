@@ -15,8 +15,14 @@ var linkCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		log.Info("get link information ...")
 
-		nlink.GetLinks()
+		nl, err := nlink.NewNLink()
+		if err != nil {
+			log.Fatal(err)
+		}
 
+		go nl.TimeoutLoop()
+
+		nl.Run()
 		return nil
 	},
 }
