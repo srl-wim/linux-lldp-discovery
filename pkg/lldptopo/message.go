@@ -1,4 +1,4 @@
-package nlink
+package lldptopo
 
 type msgID int
 

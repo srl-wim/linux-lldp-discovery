@@ -1,6 +1,7 @@
-package nlink
+package lldptopo
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,18 +11,29 @@ import (
 )
 
 // ListAndWatch function
-func (nl *NLink) ListAndWatch() error {
+func (lt *LldpTopo) ListAndWatch() error {
 	for {
 		log.Info("ListandWatch message received")
 		select {
-		case msg := <-nl.workChan:
+		case msg := <-lt.workChan:
 			switch msg.id {
 			case doWork:
 				// trigger to see if link status has changed
-				log.Info("ListandWatch compareLinkStatus message received")
-				if err := nl.ParseLinks(); err != nil {
-					log.Error(err)
+				d, err := lt.GetLldpTopology()
+				if err != nil {
+					log.Errorf("Get LLDP topology failure: %s", err)
 				}
+				if err := lt.ParseLldpDiscovery(d); err != nil {
+					log.Errorf("Parse LLDP discovery failed: %s", err)
+				}
+				fmt.Println("#######################")
+				for dName, dev := range lt.Devices {
+					fmt.Printf("Device: %s %s %s\n", dName, dev.ID, dev.Kind)
+					for eName, ep := range dev.Endpoints {
+						fmt.Printf("   Port: %s %s\n", eName, ep.ID)
+					}
+				}
+				fmt.Println("#######################")
 			default:
 				log.Errorf("Unexpected message: %d", msg)
 			}
@@ -31,7 +43,7 @@ func (nl *NLink) ListAndWatch() error {
 }
 
 // TimeoutLoop runs timeout loop until the program stops
-func (nl *NLink) TimeoutLoop() {
+func (lt *LldpTopo) TimeoutLoop() {
 	// Period, in seconds, to dump stats if only counting.
 	const TIMEOUT = 5
 	timeout := make(chan bool, 1)
@@ -54,8 +66,8 @@ func (nl *NLink) TimeoutLoop() {
 				id:       doWork,
 				respChan: nil,
 			}
-			nl.workChan <- request
-		case msg := <-nl.timeoutChan:
+			lt.workChan <- request
+		case msg := <-lt.timeoutChan:
 			switch msg.id {
 			case shutdown:
 				log.Infof("Shutdown message received")
@@ -72,7 +84,7 @@ func (nl *NLink) TimeoutLoop() {
 }
 
 // Run the loop to report what is going on, and waiting for interrupt to exit clean.
-func (nl *NLink) Run() {
+func (lt *LldpTopo) Run() {
 	// Wait for a SIGINT, (typically triggered from CTRL-C), TERM,
 	// QUIT. Run cleanup when signal is received. Ideally use os
 	// independent os.Interrupt, Kill (but need an exhaustive
@@ -90,7 +102,7 @@ func (nl *NLink) Run() {
 			log.Info("Interrupt, stopping gracefully...")
 			// add a stop function to stop the go-routine
 
-			shut(nl.timeoutChan)
+			shut(lt.timeoutChan)
 
 			// Now that they are all done. Unblock
 			doneSignal <- true

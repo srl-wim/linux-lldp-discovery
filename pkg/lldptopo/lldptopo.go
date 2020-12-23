@@ -12,6 +12,9 @@ type LldpTopo struct {
 	InputFile *string
 	Devices   map[string]*Device
 
+	timeoutChan chan *cMsg
+	workChan    chan *cMsg
+
 	ctx     context.Context
 	debug   bool
 	timeout time.Duration
@@ -66,9 +69,11 @@ func WithInputFile(file string) Option {
 // NewLldpTopo function defines a new lldptopo
 func NewLldpTopo(opts ...Option) (*LldpTopo, error) {
 	lt := &LldpTopo{
-		InputFile: new(string),
-		Devices:   make(map[string]*Device),
-		ctx:       context.Background(),
+		InputFile:   new(string),
+		Devices:     make(map[string]*Device),
+		timeoutChan: make(chan *cMsg),
+		workChan:    make(chan *cMsg),
+		ctx:         context.Background(),
 	}
 	for _, o := range opts {
 		o(lt)

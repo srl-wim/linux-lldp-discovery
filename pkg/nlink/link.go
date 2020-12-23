@@ -31,7 +31,7 @@ type NLink struct {
 	Links map[string]*Link
 
 	timeoutChan chan *cMsg
-	linkChan    chan *cMsg
+	workChan    chan *cMsg
 
 	debug   bool
 	timeout time.Duration
@@ -53,7 +53,7 @@ func NewNLink(opts ...Option) (*NLink, error) {
 	nl := &NLink{
 		Links:       make(map[string]*Link),
 		timeoutChan: make(chan *cMsg),
-		linkChan:    make(chan *cMsg),
+		workChan:    make(chan *cMsg),
 	}
 	for _, o := range opts {
 		o(nl)

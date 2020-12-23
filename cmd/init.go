@@ -1,9 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-	"time"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/srl-wim/linux-lldp-discovery/pkg/lldptopo"
@@ -32,49 +29,13 @@ var initCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		for i := 0; i < 10; i++ {
-			d, err := lt.GetLldpTopology()
-			if err != nil {
-				log.Errorf("Get LLDP topology failure: %s", err)
-			}
+		go lt.ListAndWatch()
 
-			if err := lt.ParseLldpDiscovery(d); err != nil {
-				log.Errorf("Parse LLDP discovery failed: %s", err)
-			}
+		go lt.TimeoutLoop()
 
-			fmt.Println("#######################")
-			for dName, dev := range lt.Devices {
-				fmt.Printf("Device: %s %s %s\n", dName, dev.ID, dev.Kind)
-				for eName, ep := range dev.Endpoints {
-					fmt.Printf("   Port: %s %s\n", eName, ep.ID)
-				}
-			}
-			fmt.Println("#######################")
-			time.Sleep(10 * time.Second)
-		}
+		lt.Run()
 
-		/*
-			for i := 0; i < 10; i++ {
-				d, err := lt.ParseInputFile(lt.InputFile)
-				if err != nil {
-					log.Fatal(err)
-				}
-				if err := lt.ParseLldpDiscovery(d); err != nil {
-					log.Fatal(err)
-				}
 
-				fmt.Println("#######################")
-				for dName, dev := range lt.Devices {
-					fmt.Printf("Device: %s %s %s\n", dName, dev.ID, dev.Kind)
-					for eName, ep := range dev.Endpoints {
-						fmt.Printf("   Port: %s %s\n", eName, ep.ID)
-					}
-				}
-				fmt.Println("#######################")
-				time.Sleep(10 * time.Second)
-
-			}
-		*/
 		return nil
 	},
 }
